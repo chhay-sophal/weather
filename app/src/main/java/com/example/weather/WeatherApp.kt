@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.weather.data.models.SavedLocation
 import com.example.weather.ui.components.PermissionRationaleDialog
 import com.example.weather.ui.components.RationaleState
+import com.example.weather.ui.screens.DetailScreen
 import com.example.weather.ui.screens.ListScreen
 import com.example.weather.ui.screens.MainScreen
 import com.example.weather.ui.screens.SearchScreen
@@ -99,6 +100,13 @@ fun WeatherApp() {
         }
         composable("search") {
             SearchScreen(navController, weatherViewModel)
+        }
+        composable("detail/{lat}/{lon}") { backStakeEntry ->
+            val lat = backStakeEntry.arguments?.getString("lat")
+            val lon = backStakeEntry.arguments?.getString("lon")
+            if (lat != null && lon != null) {
+                DetailScreen(navController, weatherViewModel, lat, lon)
+            }
         }
     }
 }
