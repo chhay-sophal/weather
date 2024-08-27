@@ -111,7 +111,7 @@ fun SearchScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-
+                                navController.navigate("detail/${result.lat}/${result.lon}")
                             }
                     ) {
                         Row(

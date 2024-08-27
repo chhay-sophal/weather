@@ -21,7 +21,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Archive
+//import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,6 +36,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberUpdatedState
@@ -77,7 +78,7 @@ fun ListScreen(
                 ),
                 title = { Text(text = "Weather", fontSize = 30.sp, fontWeight = FontWeight.Bold)},
                 actions = {
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = { navController.navigate("search") }) {
                         Icon(
                             imageVector = Icons.Filled.Add,
                             contentDescription = "Add location"
@@ -94,9 +95,12 @@ fun ListScreen(
                 .padding(it)
         ) {
             LazyColumn {
-                itemsIndexed(weatherByLocation) {index, weatherInfo ->
+                itemsIndexed(
+                    items = weatherByLocation,
+                    key = { _, weatherInfo -> "${weatherInfo.location.lat},${weatherInfo.location.lon}" }
+                ) {index, weatherInfo ->
                     WeatherItem(
-                        weatherInfo,
+                        weatherInfo = weatherInfo,
                         index = index,
                         onRemove = {weather ->
                             weatherViewModel.removeLocation(SavedLocation(weather.location.lat, weather.location.lon))
@@ -115,7 +119,7 @@ fun ListScreen(
 @Composable
 fun DismissBackground(dismissState: SwipeToDismissBoxState) {
     val color = when (dismissState.dismissDirection) {
-        SwipeToDismissBoxValue.StartToEnd -> Color(0xFF1DE9B6)
+        SwipeToDismissBoxValue.StartToEnd -> Color.Transparent
         SwipeToDismissBoxValue.EndToStart -> Color(0xFFFF1744)
         SwipeToDismissBoxValue.Settled -> Color.Transparent
     }
@@ -128,10 +132,10 @@ fun DismissBackground(dismissState: SwipeToDismissBoxState) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Icon(
-            Icons.Default.Archive,
-            contentDescription = "Archive"
-        )
+//        Icon(
+//            Icons.Default.Archive,
+//            contentDescription = "Archive"
+//        )
         Spacer(modifier = Modifier)
         Icon(
             Icons.Default.Delete,
@@ -166,23 +170,29 @@ fun WeatherItem(
         )
     } else {
         val dismissState = rememberSwipeToDismissBoxState(
-            confirmValueChange = {
-                when(it) {
-                    SwipeToDismissBoxValue.StartToEnd -> {
-                        return@rememberSwipeToDismissBoxState false
-                    }
+            confirmValueChange = {value ->
+                when(value) {
+//                    SwipeToDismissBoxValue.StartToEnd -> {
+//                        return@rememberSwipeToDismissBoxState false
+//                    }
                     SwipeToDismissBoxValue.EndToStart -> {
                         onRemove(currentItem)
                         Toast.makeText(context, "Location removed", Toast.LENGTH_SHORT).show()
                         return@rememberSwipeToDismissBoxState true
                     }
-                    SwipeToDismissBoxValue.Settled -> return@rememberSwipeToDismissBoxState false
+//                    SwipeToDismissBoxValue.Settled -> return@rememberSwipeToDismissBoxState false
+                    else -> false
                 }
 //                return@rememberSwipeToDismissBoxState true
             },
             // positional threshold of 25%
             positionalThreshold = { it * .25f }
         )
+
+        // Reset dismiss state when the list size changes
+        LaunchedEffect(weatherInfo) {
+            dismissState.reset() // This will ensure that the state is fresh for each new item
+        }
 
         SwipeToDismissBox(
             state = dismissState,
@@ -246,49 +256,4 @@ fun WeatherCard(
             }
         }
     }
-
-//    Box(
-//        modifier = Modifier
-//            .padding(horizontal = 10.dp)
-//            .padding(bottom = 10.dp)
-//            .fillMaxWidth()
-//            .clip(RoundedCornerShape(16.dp)) // Rounded corners
-//            .background(Color(0x1AFFFFFF))
-//            .clickable (onClick = onClick)
-//    ) {
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(120.dp)
-//                .padding(15.dp)
-//        ) {
-//            Column(
-//                modifier = Modifier.fillMaxHeight()
-//            ) {
-////                    val date = weatherInfo.location.localtime
-////                    val time = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-////                    val formattedTime = time.format(DateTimeFormatter.ofPattern("h:mm a")).lowercase()
-//
-//                Text(text = weatherInfo.location.name, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-////                    Text(text = formattedTime, fontWeight = FontWeight.Medium)
-//                Spacer(modifier = Modifier.weight(1f))
-//                Text(text = weatherInfo.current.condition.text)
-//            }
-//            Spacer(modifier = Modifier.weight(1f))
-//            Column(
-//                modifier = Modifier.fillMaxHeight(),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Text(text = "${weatherInfo.current.tempC.toInt()}°", fontSize = 45.sp, fontWeight = FontWeight.Normal)
-//                Spacer(modifier = Modifier.weight(1f))
-//                Row(
-//                    horizontalArrangement = Arrangement.Center
-//                ) {
-//                    Text(text = "H: ${weatherInfo.forecast.forecastday[0].day.maxtempC.toInt()}°", fontWeight = FontWeight.Medium)
-//                    Spacer(modifier = Modifier.width(10.dp))
-//                    Text(text = "L: ${weatherInfo.forecast.forecastday[0].day.mintempC.toInt()}°", fontWeight = FontWeight.Medium)
-//                }
-//            }
-//        }
-//    }
 }

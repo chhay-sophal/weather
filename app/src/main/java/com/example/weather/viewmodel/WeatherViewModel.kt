@@ -80,7 +80,7 @@ class WeatherViewModel() : ViewModel() {
                         newForecastList.add(response) // Add each response to the temporary list
                     }
                     // Update the LiveData with the new list
-                    _todayForecast.value = newForecastList
+                    _todayForecast.postValue(newForecastList)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -133,9 +133,7 @@ class WeatherViewModel() : ViewModel() {
     fun removeLocation(location: SavedLocation) {
         _savedLocation.removeAll { it == location }
         fetchTodayForecast()
-        Log.d("Remove", "Removing Location")
-//        _todayForecast.value = _todayForecast.value.filter { it != weatherInfo }
-//        cacheManager.removeLocation(locationId)
+        Log.d("Remove", "Location removed: $location")
     }
 
     fun getSavedLocations(): List<SavedLocation> {

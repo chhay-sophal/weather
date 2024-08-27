@@ -113,7 +113,7 @@ fun MainScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = { navController.navigate("list-view") }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.List,
                             contentDescription = "List View"
@@ -121,7 +121,7 @@ fun MainScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = { navController.navigate("search") }) {
                         Icon(
                             imageVector = Icons.Filled.Add,
                             contentDescription = "Localized description"
