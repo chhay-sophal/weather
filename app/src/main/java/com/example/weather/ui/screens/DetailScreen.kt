@@ -28,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.weather.data.models.SavedLocation
+import com.example.weather.ui.components.LocationWeatherPage
 import com.example.weather.viewmodel.WeatherViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -93,7 +94,7 @@ fun DetailScreen(
             contentAlignment = Alignment.Center
         ) {
             if (forecast != null) {
-                LocationWeatherCard(forecast!!)
+                LocationWeatherPage(forecast!!)
             } else {
                 CircularProgressIndicator()
             }
