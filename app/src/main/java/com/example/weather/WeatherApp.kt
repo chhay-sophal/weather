@@ -21,6 +21,7 @@ import com.example.weather.ui.components.PermissionRationaleDialog
 import com.example.weather.ui.components.RationaleState
 import com.example.weather.ui.screens.ListScreen
 import com.example.weather.ui.screens.MainScreen
+import com.example.weather.ui.screens.SearchScreen
 import com.example.weather.viewmodel.WeatherViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -95,6 +96,9 @@ fun WeatherApp() {
         }
         composable("list-view") {
             ListScreen(navController, weatherViewModel)
+        }
+        composable("search") {
+            SearchScreen(navController, weatherViewModel)
         }
     }
 }
