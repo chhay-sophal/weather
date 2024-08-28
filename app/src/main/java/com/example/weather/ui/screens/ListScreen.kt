@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -64,16 +66,30 @@ fun ListScreen(
                             contentDescription = "Refresh"
                         )
                     }
-                    IconButton(onClick = { navController.navigate("search") }) {
+                    IconButton(onClick = { navController.navigate("about-us") }) {
                         Icon(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = "Search location"
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "About Us"
                         )
                     }
                 },
                 scrollBehavior = scrollBehavior,
             )
-        }
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate("search") // Navigate to the About Us screen
+                },
+                containerColor = Color(0xFF1C1C1C),
+                contentColor = Color(0xFFE5E5E5)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Search"
+                )
+            }
+        },
     ) {
         Box(
             modifier = Modifier
