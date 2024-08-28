@@ -3,6 +3,7 @@ package com.example.weather.ui.components
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.weather.R
 import com.example.weather.data.models.WeatherRoot
@@ -37,7 +40,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LocationWeatherPage(forecast: WeatherRoot) {
+fun LocationWeatherPage(forecast: WeatherRoot, navController: NavController = rememberNavController(),) {
     Column {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -170,7 +173,10 @@ fun LocationWeatherPage(forecast: WeatherRoot) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Today", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE1C91C))
-            Text(text = "Next 7 days", fontSize = 17.sp, fontWeight = FontWeight.Bold)
+            Text(text = "Next 7 days", fontSize = 17.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable {
+                    navController.navigate("next-seven-day")
+                })
         }
 
         Box(modifier = Modifier.padding(10.dp)) {

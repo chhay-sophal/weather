@@ -148,21 +148,18 @@ class WeatherViewModel() : ViewModel() {
 //        return cacheManager.getSavedLocations()
     }
 
-//    fun fetchSevenDayForecast(apiKey: String, location: String) {
-//        WeatherApi.service.getSevenDayForecast(apiKey, location)
-//            .enqueue(object : Callback<Root> {
-//                override fun onResponse(call: Call<Root>, response: Response<Root>) {
-//                    if (response.isSuccessful) {
-//                        _sevenDayForecast.postValue(response.body())
-//                    } else {
-//                        // Handle error
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<Root>, t: Throwable) {
-//                    // Handle failure
-//                }
-//            })
-//    }
+    fun fetchSevenDayForecast( location: String) {
+        viewModelScope.launch {
+            try {
+                val response = apiService.getSevenDayForecast(location = location)
+                _sevenDayForecast.value = response
+                println(response)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
 }
 
