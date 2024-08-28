@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -123,15 +124,19 @@ fun MainScreen(
                 .verticalScroll(rememberScrollState()),
             contentAlignment = Alignment.Center
         ) {
-            if (locationPermissionState.status.isGranted && todayForecast.isNotEmpty()) {
-                HorizontalPager(state = pagerState) { page ->
-                    LocationWeatherPage(todayForecast[page])
-                }
-
-                if (indexToShow < todayForecast.size) {
-                    coroutineScope.launch {
-                        pagerState.scrollToPage(indexToShow)
+            if (locationPermissionState.status.isGranted) {
+                if (todayForecast.isNotEmpty()) {
+                    HorizontalPager(state = pagerState) { page ->
+                        LocationWeatherPage(todayForecast[page])
                     }
+
+                    if (indexToShow < todayForecast.size) {
+                        coroutineScope.launch {
+                            pagerState.scrollToPage(indexToShow)
+                        }
+                    }
+                } else {
+                    CircularProgressIndicator()
                 }
             }
         }

@@ -17,6 +17,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather.data.models.WeatherRoot
+import kotlinx.coroutines.delay
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -33,6 +40,27 @@ fun WeatherCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val timeZoneId = weatherInfo.location.tzId
+    val formattedTime = remember {
+        mutableStateOf(
+            ZonedDateTime.now(ZoneId.of(timeZoneId))
+                .format(DateTimeFormatter.ofPattern("H:mm a"))
+        )
+    }
+
+    // Update time every minute, synchronized with the system clock
+    LaunchedEffect(Unit) {
+        while (true) {
+            val now = ZonedDateTime.now(ZoneId.of(timeZoneId))
+            val formatted = now.format(DateTimeFormatter.ofPattern("H:mm a"))
+            formattedTime.value = formatted
+
+            // Calculate the delay until the start of the next minute
+            val secondsUntilNextMinute = 60 - now.second
+            delay(secondsUntilNextMinute * 1000L) // Convert to milliseconds
+        }
+    }
+
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp)) // Rounded corners
@@ -49,6 +77,7 @@ fun WeatherCard(
                 modifier = Modifier.fillMaxHeight()
             ) {
                 Text(text = weatherInfo.location.name, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                Text(text = formattedTime.value)
                 Spacer(modifier = Modifier.weight(1f))
                 Text(text = weatherInfo.current.condition.text)
             }
