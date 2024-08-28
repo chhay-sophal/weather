@@ -100,7 +100,7 @@ fun WeatherApp() {
         composable("search") {
             SearchScreen(navController, weatherViewModel)
         }
-        composable("next-seven-day"){backStakeEntry ->
+        composable("next-seven-day/{lat}/{lon}"){backStakeEntry ->
             val lat = backStakeEntry.arguments?.getString("lat")
             val lon = backStakeEntry.arguments?.getString("lon")
             if (lat != null && lon != null) {

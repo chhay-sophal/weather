@@ -40,7 +40,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LocationWeatherPage(forecast: WeatherRoot, navController: NavController = rememberNavController(),) {
+fun LocationWeatherPage(forecast: WeatherRoot, navController: NavController) {
     Column {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -175,7 +175,7 @@ fun LocationWeatherPage(forecast: WeatherRoot, navController: NavController = re
             Text(text = "Today", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE1C91C))
             Text(text = "Next 7 days", fontSize = 17.sp, fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable {
-                    navController.navigate("next-seven-day")
+                    navController.navigate("next-seven-day/${forecast.location.lat}/${forecast.location.lon}")
                 })
         }
 
