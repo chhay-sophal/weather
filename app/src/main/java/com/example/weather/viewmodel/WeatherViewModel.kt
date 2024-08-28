@@ -46,6 +46,9 @@ class WeatherViewModel() : ViewModel() {
     private val _location = mutableStateOf<Location?>(null)
     val location: State<Location?> get() = _location
 
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     fun updateLocation(newLocation: Location?) {
         _location.value = newLocation
     }
@@ -67,9 +70,11 @@ class WeatherViewModel() : ViewModel() {
         }
     }
 
-    private fun fetchTodayForecast() {
+    fun fetchTodayForecast() {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
+
                 if (_savedLocation.isNotEmpty()) {
                     val newForecastList = mutableListOf<WeatherRoot>() // Temporary list to store all responses
                     for (location in _savedLocation) {
@@ -84,6 +89,8 @@ class WeatherViewModel() : ViewModel() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            } finally {
+                _isLoading.value = false
             }
         }
     }

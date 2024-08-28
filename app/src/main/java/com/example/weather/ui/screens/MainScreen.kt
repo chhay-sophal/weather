@@ -109,7 +109,7 @@ fun MainScreen(
                     IconButton(onClick = { navController.navigate("search") }) {
                         Icon(
                             imageVector = Icons.Filled.Add,
-                            contentDescription = "Localized description"
+                            contentDescription = "Add location"
                         )
                     }
                 },

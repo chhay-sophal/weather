@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,6 +22,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +41,7 @@ fun ListScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val weatherByLocation by weatherViewModel.todayForecast.observeAsState(emptyList())
+    val isLoading by weatherViewModel.isLoading.observeAsState(initial = false)
 
     Scaffold(
         modifier = Modifier
@@ -54,10 +58,16 @@ fun ListScreen(
                 ),
                 title = { Text(text = "Weather", fontSize = 30.sp, fontWeight = FontWeight.Bold)},
                 actions = {
+                    IconButton(onClick = { weatherViewModel.fetchTodayForecast() }) {
+                        Icon(
+                            imageVector = Icons.Filled.Refresh,
+                            contentDescription = "Refresh"
+                        )
+                    }
                     IconButton(onClick = { navController.navigate("search") }) {
                         Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = "Add location"
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "Search location"
                         )
                     }
                 },
@@ -70,21 +80,25 @@ fun ListScreen(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            LazyColumn {
-                itemsIndexed(
-                    items = weatherByLocation,
-                    key = { _, weatherInfo -> "${weatherInfo.location.lat},${weatherInfo.location.lon}" }
-                ) {index, weatherInfo ->
-                    WeatherItem(
-                        weatherInfo = weatherInfo,
-                        index = index,
-                        onRemove = {weather ->
-                            weatherViewModel.removeLocation(SavedLocation(weather.location.lat, weather.location.lon))
-                        },
-                        onClick = {
-                            navController.navigate("home/$index")
-                        }
-                    )
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            } else {
+                LazyColumn {
+                    itemsIndexed(
+                        items = weatherByLocation,
+                        key = { _, weatherInfo -> "${weatherInfo.location.lat},${weatherInfo.location.lon}" }
+                    ) {index, weatherInfo ->
+                        WeatherItem(
+                            weatherInfo = weatherInfo,
+                            index = index,
+                            onRemove = {weather ->
+                                weatherViewModel.removeLocation(SavedLocation(weather.location.lat, weather.location.lon))
+                            },
+                            onClick = {
+                                navController.navigate("home/$index")
+                            }
+                        )
+                    }
                 }
             }
         }
