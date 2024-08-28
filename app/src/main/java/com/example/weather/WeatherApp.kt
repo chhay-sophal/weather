@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.weather.data.models.SavedLocation
 import com.example.weather.ui.components.PermissionRationaleDialog
 import com.example.weather.ui.components.RationaleState
+import com.example.weather.ui.screens.AboutUsScreen
 import com.example.weather.ui.screens.DetailScreen
 import com.example.weather.ui.screens.ListScreen
 import com.example.weather.ui.screens.MainScreen
@@ -114,6 +115,9 @@ fun WeatherApp() {
             if (lat != null && lon != null) {
                 DetailScreen(navController, weatherViewModel, lat, lon)
             }
+        }
+        composable("about-us") {
+            AboutUsScreen(navController)
         }
     }
 }
