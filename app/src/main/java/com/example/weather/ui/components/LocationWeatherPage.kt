@@ -12,10 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -37,21 +34,21 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LocationWeatherPage(forecast: WeatherRoot) {
-    Column {
+fun LocationWeatherPage(weather: WeatherRoot) {
+    Column(modifier = Modifier.padding(15.dp)) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = forecast.location.name,
+                text = weather.location.name,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(10.dp))
 
-            val localDateTime = forecast.current.lastUpdated
+            val localDateTime = weather.current.lastUpdated
             val dateTime = LocalDateTime.parse(localDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
             val dayOfWeek = dateTime.dayOfWeek
             val dayOfMonth = dateTime.dayOfMonth
@@ -68,7 +65,6 @@ fun LocationWeatherPage(forecast: WeatherRoot) {
 
         Box(
             modifier = Modifier
-                .padding(10.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp)) // Rounded corners
                 .background(Color(0x1AFFFFFF))
@@ -83,13 +79,13 @@ fun LocationWeatherPage(forecast: WeatherRoot) {
                     contentAlignment = Alignment.Center
                 ) {
                     AsyncImage(
-                        model = "https:${forecast.current.condition.icon}",
+                        model = "https:${weather.current.condition.icon}",
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
                 Text(
-                    text = forecast.current.condition.text,
+                    text = weather.current.condition.text,
                     modifier = Modifier
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center,
@@ -97,7 +93,7 @@ fun LocationWeatherPage(forecast: WeatherRoot) {
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = "${forecast.current.tempC.toInt()}°",
+                    text = "${weather.current.tempC.toInt()}°",
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp),
@@ -109,9 +105,9 @@ fun LocationWeatherPage(forecast: WeatherRoot) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(text = "H: ${forecast.forecast.forecastday[0].day.maxtempC.toInt()}", fontSize = 20.sp)
+                    Text(text = "H: ${weather.forecast.forecastday[0].day.maxtempC.toInt()}°", fontSize = 20.sp)
                     Spacer(modifier = Modifier.width(15.dp))
-                    Text(text = "L: ${forecast.forecast.forecastday[0].day.mintempC.toInt()}", fontSize = 20.sp)
+                    Text(text = "L: ${weather.forecast.forecastday[0].day.mintempC.toInt()}°", fontSize = 20.sp)
                 }
                 Row(
                     modifier = Modifier
@@ -128,7 +124,7 @@ fun LocationWeatherPage(forecast: WeatherRoot) {
                             modifier = Modifier.width(40.dp)
                         )
                         Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "${forecast.forecast.forecastday[0].day.dailyChanceOfRain}%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(text = "${weather.forecast.forecastday[0].day.dailyChanceOfRain}%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(text = "Rain", fontSize = 15.sp)
                     }
@@ -141,7 +137,7 @@ fun LocationWeatherPage(forecast: WeatherRoot) {
                             modifier = Modifier.width(40.dp)
                         )
                         Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "${forecast.current.windKph.toInt()} km/h", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(text = "${weather.current.windKph.toInt()} km/h", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(text = "Wind speed", fontSize = 15.sp)
                     }
@@ -154,7 +150,7 @@ fun LocationWeatherPage(forecast: WeatherRoot) {
                             modifier = Modifier.width(40.dp)
                         )
                         Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "${forecast.current.humidity}%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(text = "${weather.current.humidity}%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(text = "Humidity", fontSize = 15.sp)
                     }
@@ -162,49 +158,6 @@ fun LocationWeatherPage(forecast: WeatherRoot) {
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Today", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE1C91C))
-            Text(text = "Next 7 days", fontSize = 17.sp, fontWeight = FontWeight.Bold)
-        }
-
-        Box(modifier = Modifier.padding(10.dp)) {
-            LazyRow {
-                items(forecast.forecast.forecastday[0].hour) { hour ->
-                    Box(
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .size(100.dp, 130.dp)
-                            .clip(RoundedCornerShape(13.dp)) // Rounded corners
-                            .background(Color(0x1AFFFFFF))
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp)
-                        ) {
-                            val date = hour.time
-                            val time = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                            val formattedTime = time.format(DateTimeFormatter.ofPattern("h a")).lowercase()
-
-                            Text(text = formattedTime, fontSize = 16.sp)
-                            AsyncImage(
-                                model = "https:${hour.condition.icon}",
-                                contentDescription = null,
-                                modifier = Modifier.size(40.dp)
-                            )
-                            Text(text = hour.tempC.toInt().toString(), fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                        }
-                    }
-                }
-            }
-        }
+        UVIndexBox(weather)
     }
 }
