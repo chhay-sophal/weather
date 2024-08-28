@@ -16,6 +16,10 @@ package com.example.weather.ui.components
  * limitations under the License.
  */
 
+// Resources
+// https://developer.android.com/develop/sensors-and-location/location
+// https://github.com/android/platform-samples/tree/main/samples/location/src/main/java/com/example/platform/location/permission
+
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

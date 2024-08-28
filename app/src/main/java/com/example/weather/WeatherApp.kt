@@ -85,9 +85,7 @@ fun WeatherApp() {
         }
     }
 
-    // Set up the NavHost with routes
     NavHost(navController = navController, startDestination = "home") {
-        // Define the "home" route
         composable("home") {
             MainScreen(navController, weatherViewModel, locationPermissionState, indexToShow = 0)
         }

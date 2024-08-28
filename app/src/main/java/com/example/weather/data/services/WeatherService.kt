@@ -9,6 +9,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+// Resource:
+// https://www.weatherapi.com
+
 private const val Base_Url = "https://api.weatherapi.com/v1/"
 private const val API_Key = "11b1d4f80a7d49229c473515242408"
 
