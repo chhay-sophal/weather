@@ -138,6 +138,20 @@ fun MainScreen(
                 } else {
                     CircularProgressIndicator()
                 }
+            } else {
+                if (todayForecast.isNotEmpty()) {
+                    HorizontalPager(state = pagerState) { page ->
+                        LocationWeatherPage(todayForecast[page], navController)
+                    }
+
+                    if (indexToShow < todayForecast.size) {
+                        coroutineScope.launch {
+                            pagerState.scrollToPage(indexToShow)
+                        }
+                    }
+                } else {
+                    CircularProgressIndicator()
+                }
             }
         }
     }
