@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -219,7 +220,7 @@ fun TeamSection() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Meet Our Team",
+            text = "Meet Our Developers",
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFFFFA726),
@@ -233,10 +234,10 @@ fun TeamSection() {
                 .padding(top = 14.dp)
         ) {
             val teamMembers = listOf(
-                TeamMember("Chhay Sophal", "Developer", R.drawable.sophal),
-                TeamMember("Chan Sarah", "Developer", R.drawable.sarah),
-                TeamMember("Toem Sophanidate", "Designer", R.drawable.nidate),
-                TeamMember("Kong Kimheak", "Developer", R.drawable.kimheak),
+                TeamMember("Chhay Sophal", "", R.drawable.sophal),
+                TeamMember("Chan Sarah", "", R.drawable.sarah),
+                TeamMember("Toem Sophanidate", "", R.drawable.nidate),
+                TeamMember("Kong Kimheak", "", R.drawable.kimheak),
             )
 
             teamMembers.chunked(2).forEach { rowItems ->
@@ -270,7 +271,8 @@ fun TeamMemberCard(member: TeamMember, modifier: Modifier = Modifier) {
             contentDescription = member.name,
             modifier = Modifier
                 .size(100.dp) // Set a consistent size for all images
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Crop
         )
         Text(
             text = member.name,
