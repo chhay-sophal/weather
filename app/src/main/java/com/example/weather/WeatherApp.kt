@@ -23,6 +23,7 @@ import com.example.weather.ui.screens.AboutUsScreen
 import com.example.weather.ui.screens.DetailScreen
 import com.example.weather.ui.screens.ListScreen
 import com.example.weather.ui.screens.MainScreen
+import com.example.weather.ui.screens.NextSevenDayScreen
 import com.example.weather.ui.screens.SearchScreen
 import com.example.weather.viewmodel.WeatherViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -99,6 +100,14 @@ fun WeatherApp() {
         }
         composable("search") {
             SearchScreen(navController, weatherViewModel)
+        }
+        composable("next-seven-day/{lat}/{lon}"){backStakeEntry ->
+            val lat = backStakeEntry.arguments?.getString("lat")
+            val lon = backStakeEntry.arguments?.getString("lon")
+            if (lat != null && lon != null) {
+                NextSevenDayScreen(navController, weatherViewModel, lat, lon)
+            }
+
         }
         composable("detail/{lat}/{lon}") { backStakeEntry ->
             val lat = backStakeEntry.arguments?.getString("lat")

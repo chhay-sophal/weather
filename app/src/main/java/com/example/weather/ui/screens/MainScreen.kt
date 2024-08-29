@@ -127,7 +127,7 @@ fun MainScreen(
             if (locationPermissionState.status.isGranted) {
                 if (todayForecast.isNotEmpty()) {
                     HorizontalPager(state = pagerState) { page ->
-                        LocationWeatherPage(todayForecast[page])
+                        LocationWeatherPage(todayForecast[page], navController)
                     }
 
                     if (indexToShow < todayForecast.size) {

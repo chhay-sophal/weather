@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.weather.R
 import com.example.weather.R.drawable.heat
@@ -51,7 +53,8 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun UVIndexBox(
-    weather: WeatherRoot
+    weather: WeatherRoot,
+    navController: NavController
 ) {
     Column(
         modifier = Modifier
@@ -66,7 +69,10 @@ fun UVIndexBox(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Today", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE1C91C))
-            Text(text = "Next 7 days", fontSize = 17.sp, fontWeight = FontWeight.Bold)
+            Text(text = "Next 7 days", fontSize = 17.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable {
+                    navController.navigate("next-seven-day/${weather.location.lat}/${weather.location.lon}")
+                })
         }
 
         Box {

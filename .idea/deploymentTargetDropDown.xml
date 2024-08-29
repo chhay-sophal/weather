@@ -5,6 +5,9 @@
       <entry key="AboutUsScreen">
         <State />
       </entry>
+      <entry key="EachDayWeatherCard">
+        <State />
+      </entry>
       <entry key="LocationWeatherPagePreview">
         <State />
       </entry>

@@ -28,7 +28,7 @@ interface WeatherService {
         @Query("key") apiKey: String = API_Key,
         @Query("q") location: String,
         @Query("days") days: Int = 7
-    ): Call<WeatherRoot>
+    ): WeatherRoot
 
     @GET("search.json")
     suspend fun search(

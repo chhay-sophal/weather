@@ -3,6 +3,7 @@ package com.example.weather.ui.components
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.weather.R
 import com.example.weather.data.models.WeatherRoot
@@ -34,7 +37,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LocationWeatherPage(weather: WeatherRoot) {
+fun LocationWeatherPage(weather: WeatherRoot, navController: NavController) {
     Column(modifier = Modifier.padding(15.dp)) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -158,6 +161,7 @@ fun LocationWeatherPage(weather: WeatherRoot) {
             }
         }
 
-        UVIndexBox(weather)
+        UVIndexBox(weather, navController)
+
     }
 }
