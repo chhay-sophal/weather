@@ -20,7 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -108,7 +108,7 @@ fun MainScreen(
                 actions = {
                     IconButton(onClick = { navController.navigate("search") }) {
                         Icon(
-                            imageVector = Icons.Filled.Add,
+                            imageVector = Icons.Filled.Search,
                             contentDescription = "Add location"
                         )
                     }
@@ -127,7 +127,7 @@ fun MainScreen(
             if (locationPermissionState.status.isGranted) {
                 if (todayForecast.isNotEmpty()) {
                     HorizontalPager(state = pagerState) { page ->
-                        LocationWeatherPage(todayForecast[page])
+                        LocationWeatherPage(todayForecast[page], navController)
                     }
 
                     if (indexToShow < todayForecast.size) {

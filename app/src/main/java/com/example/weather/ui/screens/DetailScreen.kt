@@ -94,7 +94,7 @@ fun DetailScreen(
             contentAlignment = Alignment.Center
         ) {
             if (forecast != null) {
-                LocationWeatherPage(forecast!!)
+                LocationWeatherPage(forecast!!, navController)
             } else {
                 CircularProgressIndicator()
             }
