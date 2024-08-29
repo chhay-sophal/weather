@@ -1,8 +1,10 @@
 package com.example.weather.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,7 +15,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -202,7 +203,91 @@ fun AboutUsScreen(
                         )
                     }
                 }
+
+                // Team Section
+                TeamSection()
             }
         }
     }
 }
+@Composable
+fun TeamSection() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Meet Our Team",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFFFA726),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        // Team members grid
+        Column(
+            modifier = Modifier
+                .padding(top = 14.dp)
+        ) {
+            val teamMembers = listOf(
+                TeamMember("Chhay Sophal", "Developer", R.drawable.sophal),
+                TeamMember("Chan Sarah", "Developer", R.drawable.sarah),
+                TeamMember("Toem Sophanidate", "Designer", R.drawable.nidate),
+                TeamMember("Kong Kimheak", "Developer", R.drawable.kimheak),
+            )
+
+            teamMembers.chunked(2).forEach { rowItems ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    rowItems.forEach { member ->
+                        TeamMemberCard(member, Modifier.weight(1f))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TeamMemberCard(member: TeamMember, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .padding(8.dp)
+            .shadow(4.dp, RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(8.dp))
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Set a fixed size for all images
+        Image(
+            painter = painterResource(id = member.imageRes),
+            contentDescription = member.name,
+            modifier = Modifier
+                .size(100.dp) // Set a consistent size for all images
+                .clip(RoundedCornerShape(8.dp))
+        )
+        Text(
+            text = member.name,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFE5E5E5),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+        Text(
+            text = member.role,
+            fontSize = 16.sp,
+            color = Color(0xFFB0BEC5),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+    }
+}
+
+data class TeamMember(val name: String, val role: String, val imageRes: Int)
