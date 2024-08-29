@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class WeatherViewModel() : ViewModel() {
+class WeatherViewModel : ViewModel() {
     private val _todayForecast = MutableLiveData<List<WeatherRoot>>()
     val todayForecast: LiveData<List<WeatherRoot>> get() = _todayForecast
 
@@ -133,7 +133,7 @@ class WeatherViewModel() : ViewModel() {
     fun saveLocation(location: SavedLocation): Int {
         _savedLocation.add(location)
         fetchTodayForecast()
-        Log.d("SaveLocation", "${_savedLocation.indexOf(location)}")
+        Log.d("SaveLocation", "${_savedLocation.indexOf(location)}: $_savedLocation")
         return _savedLocation.indexOf(location)
     }
 
