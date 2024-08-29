@@ -86,11 +86,10 @@ fun AboutUsScreen(
             ) {
                 // App Logo with rounded corners
                 Image(
-                    painter = painterResource(id = R.drawable.weather_app_logo),
+                    painter = painterResource(id = R.drawable.ic_app_logo_round),
                     contentDescription = "App Logo",
                     modifier = Modifier
                         .padding(bottom = 16.dp)
-                        .clip(RoundedCornerShape(50))
                         .size(100.dp) // Adjust size as needed
                 )
 
