@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
@@ -80,7 +82,7 @@ fun NextSevenDayScreen(
                     actionIconContentColor = Color(0xFFE5E5E5),
                     navigationIconContentColor = Color(0xFFE5E5E5)
                 ),
-                title = { Text(text = "")},
+                title = { Text(text = "7-Day Forecast")},
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -114,97 +116,117 @@ fun NextSevenDayScreen(
 fun NextSevenDayWeatherCard(forecast: WeatherRoot) {
     val tomorrow = forecast.forecast.forecastday[1]
 
-    Column {
-        Box(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp)) // Rounded corners
-                .background(Color(0x1AFFFFFF))
-        ) {
-            Column(
-                modifier = Modifier.padding(20.dp)
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)
+    ) {
+        // Static content as a header
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp)) // Rounded corners
+                    .background(Color(0x1AFFFFFF))
+                    .padding(10.dp) // Add padding inside the Box
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                Column(
+                    modifier = Modifier.padding(20.dp)
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.Start
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        AsyncImage(
-                            model = "https:${tomorrow.day.condition.icon}",
-                            contentDescription = null,
-                            modifier = Modifier.size(120.dp)
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            AsyncImage(
+                                model = "https:${tomorrow.day.condition.icon}",
+                                contentDescription = null,
+                                modifier = Modifier.size(120.dp)
+                            )
+                        }
+                        Column(
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            Text(
+                                text = "Tomorrow",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(
+                                text = "H: ${tomorrow.day.maxtempC.toInt()}°",
+                                fontSize = 40.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "L: ${tomorrow.day.mintempC.toInt()}°",
+                                fontSize = 40.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(
+                                text = "Mostly Cloudy",
+                                fontSize = 15.sp
+                            )
+                        }
                     }
-                    Column(
-                        horizontalAlignment = Alignment.Start
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Text(text = "Tomorrow", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "H: ${tomorrow.day.maxtempC.toInt()}°", fontSize = 40.sp, fontWeight = FontWeight.Bold)
-                        Text(text = "L: ${tomorrow.day.mintempC.toInt()}°", fontSize = 40.sp, fontWeight = FontWeight.Bold)
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "Mostly Cloudy", fontSize = 15.sp)
-                    }
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_precipitation),
-                            contentDescription = null,
-                            modifier = Modifier.width(40.dp)
-                        )
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "22%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "Rain", fontSize = 15.sp)
-                    }
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_wind),
-                            contentDescription = null,
-                            modifier = Modifier.width(40.dp)
-                        )
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "12 km/h", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "Wind speed", fontSize = 15.sp)
-                    }
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_humidity),
-                            contentDescription = null,
-                            modifier = Modifier.width(40.dp)
-                        )
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "18%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "Humidity", fontSize = 15.sp)
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_precipitation),
+                                contentDescription = null,
+                                modifier = Modifier.width(40.dp)
+                            )
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(text = "22%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(text = "Rain", fontSize = 15.sp)
+                        }
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_wind),
+                                contentDescription = null,
+                                modifier = Modifier.width(40.dp)
+                            )
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(text = "12 km/h", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(text = "Wind speed", fontSize = 15.sp)
+                        }
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_humidity),
+                                contentDescription = null,
+                                modifier = Modifier.width(40.dp)
+                            )
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(text = "18%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(text = "Humidity", fontSize = 15.sp)
+                        }
                     }
                 }
             }
         }
-        Box(modifier = Modifier.padding(10.dp)) {
-            LazyColumn {
-                itemsIndexed(forecast.forecast.forecastday) { index, forecastByDay ->
-                    EachDayWeatherCard(forecastByDay, isFirst = index == 0)
-                }
-            }
+
+        // Dynamic content as list items
+        itemsIndexed(forecast.forecast.forecastday) { index, forecastByDay ->
+            EachDayWeatherCard(forecastByDay, isFirst = index == 0)
         }
     }
 }
@@ -215,7 +237,7 @@ fun NextSevenDayWeatherCard(forecast: WeatherRoot) {
 fun EachDayWeatherCard(forecastByDay: Forecastday, isFirst: Boolean){
     Box(
         modifier = Modifier
-            .padding(bottom = 10.dp)
+            .padding(top = 20.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0x1AFFFFFF)),
@@ -243,7 +265,9 @@ fun EachDayWeatherCard(forecastByDay: Forecastday, isFirst: Boolean){
                 AsyncImage(
                     model = "https:${forecastByDay.day.condition.icon}",
                     contentDescription = null,
-                    modifier = Modifier.weight(1f).height(70.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(70.dp)
                 )
 
                 Text(text = forecastByDay.day.condition.text, modifier = Modifier.weight(1f))
