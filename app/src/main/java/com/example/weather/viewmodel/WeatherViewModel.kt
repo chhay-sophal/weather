@@ -153,7 +153,6 @@ class WeatherViewModel() : ViewModel() {
             try {
                 val response = apiService.getSevenDayForecast(location = location)
                 _sevenDayForecast.value = response
-                println(response)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

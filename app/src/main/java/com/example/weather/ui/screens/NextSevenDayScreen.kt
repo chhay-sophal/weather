@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,13 +37,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.weather.R
+import com.example.weather.data.models.Forecastday
+import com.example.weather.data.models.WeatherRoot
 import com.example.weather.viewmodel.WeatherViewModel
 
 
@@ -58,7 +60,7 @@ fun NextSevenDayScreen(
     val forecast by weatherViewModel.sevenDayForecast.observeAsState()
 
     weatherViewModel.fetchSevenDayForecast("$lat, $lon")
-    println(forecast)
+//    println(forecast)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -90,14 +92,20 @@ fun NextSevenDayScreen(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            NextSevenDayWeatherCard()
+            if (forecast != null) {
+                NextSevenDayWeatherCard(forecast!!)
+            } else {
+                CircularProgressIndicator()
+            }
         }
     }
 }
 
 
 @Composable
-fun NextSevenDayWeatherCard() {
+fun NextSevenDayWeatherCard(forecast: WeatherRoot) {
+    val tomorrow = forecast.forecast.forecastday[1]
+
     Column {
         Box(
             modifier = Modifier
@@ -129,7 +137,8 @@ fun NextSevenDayWeatherCard() {
                     ) {
                         Text(text = "Tomorrow", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "25°", fontSize = 40.sp, fontWeight = FontWeight.Bold)
+                        Text(text = "H: ${tomorrow.day.maxtempC.toInt()}°", fontSize = 40.sp, fontWeight = FontWeight.Bold)
+                        Text(text = "L: ${tomorrow.day.mintempC.toInt()}°", fontSize = 40.sp, fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(text = "Mostly Cloudy", fontSize = 15.sp)
                     }
@@ -184,7 +193,9 @@ fun NextSevenDayWeatherCard() {
         }
         Box(modifier = Modifier.padding(10.dp)) {
             LazyColumn {
-
+                items(forecast.forecast.forecastday) { forecastByDay ->
+                    EachDayWeatherCard(forecastByDay)
+                }
             }
         }
     }
@@ -192,7 +203,7 @@ fun NextSevenDayWeatherCard() {
 
 
 @Composable
-fun EachDayWeatherCard(){
+fun EachDayWeatherCard(forecastByDay: Forecastday){
     Box(
         modifier = Modifier
             .padding(bottom = 10.dp)
@@ -224,7 +235,7 @@ fun EachDayWeatherCard(){
                         modifier = Modifier.width(40.dp)
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "22%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "${forecastByDay.day.dailyChanceOfRain.toInt()}%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(text = "Rain", fontSize = 15.sp)
                 }
@@ -241,7 +252,7 @@ fun EachDayWeatherCard(){
                         modifier = Modifier.width(40.dp)
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "12 km/h", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "${forecastByDay.day.maxwindKph.toInt()} km/h", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(text = "Wind speed", fontSize = 15.sp)
                 }
@@ -257,7 +268,7 @@ fun EachDayWeatherCard(){
                         modifier = Modifier.width(40.dp)
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "18%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "${forecastByDay.day.avghumidity.toInt()}%", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(text = "Humidity", fontSize = 15.sp)
                 }
