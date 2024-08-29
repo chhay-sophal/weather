@@ -1,6 +1,7 @@
 package com.example.weather.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,7 +33,7 @@ fun FirstScreen(navController: NavController) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
-        containerColor = Color(0xFF050D22),
+        containerColor = Color(0xFF3D8FDC),
         contentColor = Color(0xFFE5E5E5)
     ) {
         Box(
@@ -71,8 +73,7 @@ fun FirstScreen(navController: NavController) {
                 Text(
                     text = "Stay updated with the latest weather information.",
                     style = MaterialTheme.typography.bodyLarge,
-                    fontSize = 15.sp,
-                    color = Color.Gray
+                    fontSize = 15.sp
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -81,7 +82,12 @@ fun FirstScreen(navController: NavController) {
                 Button(
                     onClick = {
                         navController.navigate("choose-location")
-                    }
+                    },
+                    colors = ButtonColors(
+                        containerColor = Color(0xFFF4D03F),
+                        contentColor = Color(0xFF3D8FDC),
+                        disabledContainerColor = Color.Gray,
+                        disabledContentColor = Color.Red)
                 ) {
                     Text(text = "Get Started", fontSize = 16.sp)
                 }
