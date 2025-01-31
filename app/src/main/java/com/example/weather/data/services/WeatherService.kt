@@ -1,9 +1,9 @@
 package com.example.weather.data.services
 
+import com.example.weather.BuildConfig
 import com.example.weather.data.models.WeatherRoot
 import com.example.weather.data.models.SearchLocation
 import com.google.gson.GsonBuilder
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -13,7 +13,7 @@ import retrofit2.http.Query
 // https://www.weatherapi.com
 
 private const val Base_Url = "https://api.weatherapi.com/v1/"
-private const val API_Key = "11b1d4f80a7d49229c473515242408"
+private const val API_Key = BuildConfig.WEATHER_API_KEY
 
 interface WeatherService {
 

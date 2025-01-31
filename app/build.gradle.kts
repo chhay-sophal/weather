@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -18,6 +20,15 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Read the API key from local.properties
+        val localProperties = Properties().apply {
+            load(project.rootProject.file("local.properties").inputStream())
+        }
+        val weatherApiKey = localProperties.getProperty("WEATHER_API_KEY", "")
+
+        // Add the API key to BuildConfig
+        buildConfigField("String", "WEATHER_API_KEY", "\"$weatherApiKey\"")
     }
 
     buildTypes {
@@ -38,6 +49,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
